@@ -5,7 +5,7 @@ import { useMarketplaceClient } from "@/src/utils/hooks/useMarketplaceClient";
 import { ApplicationContext } from "@sitecore-marketplace-sdk/client";
 
 function CustomFieldExtension() {
-  const { client, pageContext } = useMarketplaceClient();
+  const { client, isInitialized, error } = useMarketplaceClient();
   const [appContext, setAppContext] = useState<ApplicationContext>();
   const [value, setValue] = useState<string>("");
 
