@@ -1,22 +1,30 @@
 // utils/hooks/useMarketplaceClient.ts
-import { createClient } from '@sitecore-marketplace-sdk/client';
+'use client';
+
 import { useState, useEffect } from 'react';
+import * as MarketplaceSDK from '@sitecore-marketplace-sdk/client';
 
 export function useMarketplaceClient() {
-  const [client, setClient] = useState(null);
-  const [pageContext, setPageContext] = useState(null);
+  const [client, setClient] = useState<any>(null);
+  const [pageContext, setPageContext] = useState<any>(null);
 
   useEffect(() => {
-    const marketplaceClient = createClient();
+    const sdk = MarketplaceSDK as any;
+    const ClientClass = sdk.default || sdk.Client || sdk.createClient;
+    
+    if (!ClientClass) return;
+
+    const marketplaceClient = typeof ClientClass === 'function' 
+      ? ClientClass() 
+      : new ClientClass();
+      
     setClient(marketplaceClient);
 
-    // Subscribe to page context - fires whenever the author switches pages
-    marketplaceClient.subscribe('pages.context', (res) => {
+    marketplaceClient.subscribe('pages.context', (res: any) => {
       setPageContext(res.data);
     });
   }, []);
 
   return { client, pageContext };
-
 }
 
