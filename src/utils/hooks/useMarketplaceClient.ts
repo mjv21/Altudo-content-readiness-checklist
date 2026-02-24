@@ -17,8 +17,6 @@ export function useMarketplaceClient() {
   }, []);
 
   return { client, pageContext };
-<<<<<<< Updated upstream
+
 }
-=======
-}
->>>>>>> Stashed changes
+
