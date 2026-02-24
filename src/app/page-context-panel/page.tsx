@@ -1,4 +1,4 @@
-tsx'use client';
+'use client';
 
 import ContentReadinessChecklist from '../../../components/ContentReadinessChecklist';
 
