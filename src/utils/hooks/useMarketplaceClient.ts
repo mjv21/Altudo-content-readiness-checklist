@@ -7,26 +7,35 @@ import * as MarketplaceSDK from '@sitecore-marketplace-sdk/client';
 export function useMarketplaceClient() {
   const [client, setClient] = useState<any>(null);
   const [pageContext, setPageContext] = useState<any>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const sdk = MarketplaceSDK as any;
-    const ClientClass = sdk.default || sdk.Client || sdk.createClient;
-    
-    if (!ClientClass) return;
+    try {
+      const sdk = MarketplaceSDK as any;
+      const ClientClass = sdk.default || sdk.Client || sdk.createClient;
 
-    const marketplaceClient = typeof ClientClass === 'function' 
-      ? ClientClass() 
-      : new ClientClass();
-      
-    setClient(marketplaceClient);
+      if (!ClientClass) {
+        throw new Error('Marketplace SDK client class not found');
+      }
 
-    marketplaceClient.subscribe('pages.context', (res: any) => {
-      setPageContext(res.data);
-    });
+      const marketplaceClient =
+        typeof ClientClass === 'function'
+          ? ClientClass()
+          : new ClientClass();
+
+      setClient(marketplaceClient);
+
+      marketplaceClient.subscribe('pages.context', (res: any) => {
+        setPageContext(res.data);
+      });
+
+      setIsInitialized(true);
+    } catch (e) {
+      setError(e instanceof Error ? e : new Error(String(e)));
+      setIsInitialized(false);
+    }
   }, []);
 
   return { client, pageContext, isInitialized, error };
 }
-
