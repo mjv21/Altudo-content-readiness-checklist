@@ -1,18 +1,17 @@
-// utils/hooks/usePageFields.ts
-import { useXmcClient } from '@sitecore-marketplace-sdk/xmc';
+'use client';
+
 import { useState, useEffect } from 'react';
 
-export function usePageFields(pageContext) {
-  const xmcClient = useXmcClient();
-  const [fields, setFields] = useState(null);
+export function usePageFields(pageContext: any, client: any) {
+  const [fields, setFields] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!pageContext?.itemId) return;
-    
+    if (!pageContext?.itemId || !client) return;
+
     setLoading(true);
-    xmcClient.query('item.fields', { itemId: pageContext.itemId })
-      .then((res) => {
+    client.query('item.fields', { itemId: pageContext.itemId })
+      .then((res: any) => {
         setFields({
           pageTitle: res.data?.fields?.Title,
           metaDescription: res.data?.fields?.MetaDescription,
@@ -20,8 +19,11 @@ export function usePageFields(pageContext) {
           heroImageAlt: res.data?.fields?.HeroImageAlt,
         });
       })
+      .catch((error: any) => {
+        console.error('Error retrieving item fields:', error);
+      })
       .finally(() => setLoading(false));
-  }, [pageContext?.itemId]);
+  }, [pageContext?.itemId, client]);
 
   return { fields, loading };
 }
