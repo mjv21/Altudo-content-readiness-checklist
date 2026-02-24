@@ -1,4 +1,5 @@
 // utils/checklistRules.ts
+
 export interface ChecklistItem {
   id: string;
   label: string;
