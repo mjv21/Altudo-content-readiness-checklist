@@ -20,9 +20,9 @@ export function useMarketplaceClient() {
       }
 
       const marketplaceClient =
-        typeof ClientClass === 'function'
-          ? ClientClass()
-          : new ClientClass();
+  typeof ClientClass === 'function'
+    ? ClientClass({ appId: process.env.NEXT_PUBLIC_APP_ID })
+    : new ClientClass({ appId: process.env.NEXT_PUBLIC_APP_ID });
 
       setClient(marketplaceClient);
 
