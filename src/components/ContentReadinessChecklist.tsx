@@ -4,7 +4,7 @@ import { usePageFields } from '../utils/hooks/usePageFields';
 import { checklistRules } from '../utils/checklistRules';
 
 export default function ContentReadinessChecklist() {
-  const { pageContext } = useMarketplaceClient();
+  const { client, pageContext } = useMarketplaceClient();
   const { fields, loading } = usePageFields(pageContext, client);
 
   if (loading) return <div className="p-4">Checking page...</div>;
