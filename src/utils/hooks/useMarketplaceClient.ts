@@ -7,6 +7,8 @@ import * as MarketplaceSDK from '@sitecore-marketplace-sdk/client';
 export function useMarketplaceClient() {
   const [client, setClient] = useState<any>(null);
   const [pageContext, setPageContext] = useState<any>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const sdk = MarketplaceSDK as any;
@@ -25,6 +27,6 @@ export function useMarketplaceClient() {
     });
   }, []);
 
-  return { client, pageContext };
+  return { client, pageContext, isInitialized, error };
 }
 
